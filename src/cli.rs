@@ -18,6 +18,10 @@ impl Cli {
         let mut year: Option<u32> = None;
 
         match self.args.len() {
+            0 => {
+                return Ok((None, None, None));
+            }
+
             1 => {
                 year = Some(self.args.get(0).cloned().unwrap());
             }
