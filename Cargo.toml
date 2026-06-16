@@ -2,9 +2,12 @@
 name = "ncal"
 version = "0.1.0"
 edition = "2024"
-description = "A Nepali calendar for the terminal."
+description = "A terminal Bikram Sambat calendar tool, inspired by Unix cal."
 license = "MIT"
 authors= ["rajatdahal contact@rajatdahal.com.np"]
+readme= "README.md"
+repository="https://github.com/razzat008/ncal"
+keywords = ["cal","calendar","nepali"]
 
 [dependencies]
 chrono = { version = "0.4.44", features = ["serde"] }
