@@ -1,8 +1,13 @@
 pub mod app;
 pub mod cli;
 pub mod config;
+pub mod festivals;
+pub mod grid;
+pub mod json;
+pub mod names;
 
 use chrono::{Duration, NaiveDate};
+use serde::{Deserialize, Serialize};
 use thiserror::Error;
 
 // Used for offsetting the BS date using the AD date
@@ -108,7 +113,7 @@ const BS_ANCHOR_AD_YEAR: i32 = 1943;
 const BS_ANCHOR_AD_MONTH: u32 = 4;
 const BS_ANCHOR_AD_DAY: u32 = 14;
 
-#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Serialize, Deserialize)]
 pub struct BsDate {
     pub year: u16,
     pub month: u8,
@@ -135,6 +140,9 @@ pub enum NcalError {
 
     #[error("Date is outside supported AD conversion range")]
     UnsupportedAdDate,
+
+    #[error("Invalid date {got:?}; expected YYYY-MM-DD")]
+    InvalidDateFormat { got: String },
 }
 
 fn ad_anchor_date() -> NaiveDate {

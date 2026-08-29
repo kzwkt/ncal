@@ -1,0 +1,37 @@
+{
+  "_comment": [
+    "Festival and public-holiday dataset for ncal.",
+    "",
+    "'fixed'    - same BS month/day every year. Rule-based, so correct for all years.",
+    "'ad_fixed' - same Gregorian month/day every year.",
+    "'lunar'    - tithi-based festivals, pinned to one BS year. These CANNOT be derived",
+    "             from the BS_REFERENCE table and must be entered per year from an",
+    "             authoritative panchanga (e.g. the Nepal Calendar Determination",
+    "             Committee's published calendar).",
+    "",
+    "'lunar_years_covered' is the inclusive [first, last] BS year range for which lunar",
+    "entries have been entered and verified. Leave it empty while 'lunar' is empty so",
+    "the UI can tell users that Dashain/Tihar dates are not available yet rather than",
+    "implying those years genuinely have no festivals."
+  ],
+
+  "lunar_years_covered": [],
+
+  "fixed": [
+    { "month": 1,  "day": 1,  "en": "Nepali New Year",  "np": "नयाँ वर्ष",       "holiday": true },
+    { "month": 2,  "day": 15, "en": "Republic Day",     "np": "गणतन्त्र दिवस",   "holiday": true },
+    { "month": 6,  "day": 3,  "en": "Constitution Day", "np": "संविधान दिवस",    "holiday": true },
+    { "month": 9,  "day": 27, "en": "Prithvi Jayanti",  "np": "पृथ्वी जयन्ती",   "holiday": false },
+    { "month": 10, "day": 1,  "en": "Maghe Sankranti",  "np": "माघे संक्रान्ति", "holiday": true },
+    { "month": 11, "day": 7,  "en": "Democracy Day",    "np": "प्रजातन्त्र दिवस", "holiday": true }
+  ],
+
+  "ad_fixed": [
+    { "ad_month": 1,  "ad_day": 1,  "en": "English New Year",           "np": "अंग्रेजी नयाँ वर्ष", "holiday": false },
+    { "ad_month": 3,  "ad_day": 8,  "en": "International Women's Day",  "np": "नारी दिवस",        "holiday": false },
+    { "ad_month": 5,  "ad_day": 1,  "en": "Labour Day",                 "np": "मजदुर दिवस",       "holiday": true },
+    { "ad_month": 12, "ad_day": 25, "en": "Christmas",                  "np": "क्रिसमस",          "holiday": true }
+  ],
+
+  "lunar": []
+}
