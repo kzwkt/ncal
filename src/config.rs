@@ -1,21 +1,46 @@
 use crate::{BsDate, NcalError, cli::Cli, validate_bs_date};
 
-#[derive(Debug, Clone)]
+/// The parsed intent of one invocation: which month to show, and how.
+#[derive(Debug, Clone, Default)]
 pub struct Config {
     pub day: Option<u8>,
     pub month: Option<u8>,
     pub year: Option<u32>,
+    pub json: bool,
+    pub today: bool,
+    pub convert: Option<String>,
+    pub to_ad: Option<String>,
+    pub nepali: bool,
+    pub compact: bool,
 }
 
 impl Config {
     pub fn from_cli(cli: &Cli) -> Result<Self, NcalError> {
-        match cli.parse_args() {
-            Ok((day, month, year)) => Ok(Self { day, month, year }),
-            Err(e) => Err(e),
-        }
+        let (day, month, year) = cli.parse_args()?;
+        Ok(Self {
+            day,
+            month,
+            year,
+            json: cli.json,
+            today: cli.today,
+            convert: cli.convert.clone(),
+            to_ad: cli.to_ad.clone(),
+            nepali: cli.nepali,
+            compact: cli.compact,
+        })
+    }
+
+    /// True when the invocation asks a one-off question rather than for a
+    /// calendar, in which case the positional month/year are irrelevant.
+    pub fn is_query(&self) -> bool {
+        self.today || self.convert.is_some() || self.to_ad.is_some()
     }
 
     pub fn validate(&self) -> Result<(), NcalError> {
+        if self.is_query() {
+            return Ok(());
+        }
+
         if self.year.is_none() {
             if self.month.is_some() || self.day.is_some() {
                 return Err(NcalError::MissingYear);
@@ -56,11 +81,7 @@ mod tests {
 
     #[test]
     fn validate_allows_empty_config_for_current_date_mode() {
-        let config = Config {
-            day: None,
-            month: None,
-            year: None,
-        };
+        let config = Config::default();
 
         assert!(config.validate().is_ok());
     }
@@ -68,11 +89,22 @@ mod tests {
     #[test]
     fn validate_rejects_month_without_year() {
         let config = Config {
-            day: None,
             month: Some(1),
-            year: None,
+            ..Config::default()
         };
 
         assert!(matches!(config.validate(), Err(NcalError::MissingYear)));
+    }
+
+    #[test]
+    fn queries_skip_calendar_validation() {
+        // `--convert` has no month/year of its own; requiring one would be wrong.
+        let config = Config {
+            convert: Some("2026-08-29".to_string()),
+            ..Config::default()
+        };
+
+        assert!(config.is_query());
+        assert!(config.validate().is_ok());
     }
 }
