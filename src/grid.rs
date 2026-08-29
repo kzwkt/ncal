@@ -33,6 +33,8 @@ pub struct DayCell {
 #[derive(Debug, Clone, PartialEq, Eq, Serialize)]
 pub struct MonthGrid {
     pub year: u16,
+    /// `year` in Devanagari digits, so the UI never reimplements the mapping.
+    pub year_np: String,
     pub month: u8,
     pub days: u8,
     pub name: &'static str,
@@ -97,6 +99,7 @@ pub fn month_grid(year: u16, month: u8, today: NaiveDate) -> Result<MonthGrid, N
 
     Ok(MonthGrid {
         year,
+        year_np: names::to_devanagari(year as u32),
         month,
         days: month_len,
         name: names::bs_month_name(month),

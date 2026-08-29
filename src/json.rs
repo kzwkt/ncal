@@ -81,6 +81,7 @@ impl DayInfo {
 #[derive(Debug, Clone, Serialize)]
 pub struct DatedFestival {
     pub bs_day: u8,
+    pub bs_day_np: String,
     #[serde(flatten)]
     pub festival: Festival,
 }
@@ -123,7 +124,11 @@ pub fn month_document(today_ad: NaiveDate, year: u16, month: u8) -> Result<Docum
     let grid = grid::month_grid(year, month, today_ad)?;
     let festivals = festivals::festivals_in_month(year, month)
         .into_iter()
-        .map(|(bs_day, festival)| DatedFestival { bs_day, festival })
+        .map(|(bs_day, festival)| DatedFestival {
+            bs_day,
+            bs_day_np: names::to_devanagari(bs_day as u32),
+            festival,
+        })
         .collect();
 
     Ok(Document {
@@ -143,11 +148,13 @@ pub fn year_document(today_ad: NaiveDate, year: u16) -> Result<Document, NcalErr
     let mut festivals = Vec::new();
     for month in 1..=12u8 {
         months.push(grid::month_grid(year, month, today_ad)?);
-        festivals.extend(
-            festivals::festivals_in_month(year, month)
-                .into_iter()
-                .map(|(bs_day, festival)| DatedFestival { bs_day, festival }),
-        );
+        festivals.extend(festivals::festivals_in_month(year, month).into_iter().map(
+            |(bs_day, festival)| DatedFestival {
+                bs_day,
+                bs_day_np: names::to_devanagari(bs_day as u32),
+                festival,
+            },
+        ));
     }
 
     Ok(Document {
@@ -236,9 +243,12 @@ mod tests {
         assert_eq!(value["month"]["year"], 2083);
         assert_eq!(value["month"]["name"], "Bhadra");
         assert_eq!(value["month"]["days"], 31);
+        assert_eq!(value["month"]["year_np"], "२०८३");
         let weeks = value["month"]["weeks"].as_array().unwrap();
         assert!(weeks.iter().all(|w| w.as_array().unwrap().len() == 7));
         assert!(value["festivals"].is_array());
+        let new_year = parse(&month_document(today(), 2083, 1).unwrap());
+        assert_eq!(new_year["festivals"][0]["bs_day_np"], "१");
     }
 
     #[test]
