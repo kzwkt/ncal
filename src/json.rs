@@ -10,6 +10,7 @@ use serde::Serialize;
 use crate::festivals::{self, Festival};
 use crate::grid::{self, MonthGrid};
 use crate::names;
+use crate::panchanga::Reading;
 use crate::{BS_END_YEAR, BS_START_YEAR, BsDate, NcalError, ad_to_bs, bs_to_ad};
 
 /// What this build of `ncal` can answer questions about.
@@ -17,11 +18,15 @@ use crate::{BS_END_YEAR, BS_START_YEAR, BsDate, NcalError, ad_to_bs, bs_to_ad};
 pub struct Range {
     pub bs_start: u16,
     pub bs_end: u16,
-    /// Inclusive `[first, last]` BS years with hand-entered lunar festival data,
-    /// or `null` when the dataset has none. A consumer should tell the user that
-    /// tithi-based festivals are unavailable outside this range rather than
-    /// showing an empty month as if it had none.
-    pub lunar_years_covered: Option<[u16; 2]>,
+    /// Where tithi-based festivals come from. `"computed"` means ncal derives
+    /// them from the lunar rules rather than reading a per-year table, so a
+    /// consumer need not warn that Dashain or Tihar might be absent.
+    pub festival_source: &'static str,
+    /// Inclusive `[first, last]` BS years for which festivals are available.
+    pub festival_range: [u16; 2],
+    /// Inclusive `[first, last]` BS years carrying hand-verified overrides of the
+    /// computed dates, or `null` when there are none.
+    pub override_years: Option<[u16; 2]>,
 }
 
 impl Range {
@@ -29,7 +34,12 @@ impl Range {
         Self {
             bs_start: BS_START_YEAR,
             bs_end: BS_END_YEAR,
-            lunar_years_covered: festivals::lunar_years_covered().map(|(a, b)| [a, b]),
+            festival_source: "computed",
+            festival_range: {
+                let (first, last) = festivals::festival_coverage();
+                [first, last]
+            },
+            override_years: festivals::override_years().map(|(a, b)| [a, b]),
         }
     }
 }
@@ -49,6 +59,7 @@ pub struct DayInfo {
     pub bs_year_np: String,
     pub is_holiday: bool,
     pub festivals: Vec<Festival>,
+    pub panchanga: Reading,
 }
 
 impl DayInfo {
@@ -69,6 +80,7 @@ impl DayInfo {
             bs_year_np: names::to_devanagari(bs.year as u32),
             is_holiday: weekday == 6 || festivals.iter().any(|f| f.holiday),
             festivals,
+            panchanga: Reading::for_date(ad),
         })
     }
 

@@ -157,3 +157,45 @@ mod tests {
         assert_eq!(to_devanagari(31).chars().count(), 2);
     }
 }
+
+/// Tithi names, indexed 1-30 from Shukla Pratipada as [`crate::panchanga`]
+/// numbers them, as `(romanized, Devanagari)`.
+///
+/// The fifteen names repeat across the two pakshas, except that the fifteenth of
+/// the bright half is Purnima and the fifteenth of the dark half is Aunsi. Out of
+/// range yields `("", "")`.
+pub fn tithi_name(index: u8) -> (&'static str, &'static str) {
+    if index == 15 {
+        return ("Purnima", "पूर्णिमा");
+    }
+    if index == 30 {
+        return ("Aunsi", "औंसी");
+    }
+
+    match if index > 15 { index - 15 } else { index } {
+        1 => ("Pratipada", "प्रतिपदा"),
+        2 => ("Dwitiya", "द्वितीया"),
+        3 => ("Tritiya", "तृतीया"),
+        4 => ("Chaturthi", "चतुर्थी"),
+        5 => ("Panchami", "पञ्चमी"),
+        6 => ("Shashthi", "षष्ठी"),
+        7 => ("Saptami", "सप्तमी"),
+        8 => ("Ashtami", "अष्टमी"),
+        9 => ("Navami", "नवमी"),
+        10 => ("Dashami", "दशमी"),
+        11 => ("Ekadashi", "एकादशी"),
+        12 => ("Dwadashi", "द्वादशी"),
+        13 => ("Trayodashi", "त्रयोदशी"),
+        14 => ("Chaturdashi", "चतुर्दशी"),
+        _ => ("", ""),
+    }
+}
+
+/// The half of the lunation a tithi falls in, as `(romanized, Devanagari)`.
+pub fn paksha_name(index: u8) -> (&'static str, &'static str) {
+    match index {
+        1..=15 => ("Shukla", "शुक्ल पक्ष"),
+        16..=30 => ("Krishna", "कृष्ण पक्ष"),
+        _ => ("", ""),
+    }
+}
