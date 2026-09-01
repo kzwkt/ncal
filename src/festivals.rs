@@ -252,19 +252,22 @@ fn festival_date(tithi_start: f64, tithi_index: u8, kala: Kala) -> Option<NaiveD
     Some(start_date)
 }
 
+/// One BS year's resolved festivals, shared out of the memo by handle.
+type YearFestivals = Arc<Vec<(BsDate, Festival)>>;
+
 /// Every computed festival in one BS year, as `(bs_date, festival)`.
 ///
 /// Resolving one rule costs several bisections against the lunar series, so a
 /// whole year is resolved at once and memoised: paging months in a GUI must not
 /// re-solve the ephemeris on every redraw.
-fn computed_for_year(bs_year: u16) -> Arc<Vec<(BsDate, Festival)>> {
-    static CACHE: OnceLock<Mutex<HashMap<u16, Arc<Vec<(BsDate, Festival)>>>>> = OnceLock::new();
+fn computed_for_year(bs_year: u16) -> YearFestivals {
+    static CACHE: OnceLock<Mutex<HashMap<u16, YearFestivals>>> = OnceLock::new();
     let cache = CACHE.get_or_init(|| Mutex::new(HashMap::new()));
 
-    if let Ok(guard) = cache.lock() {
-        if let Some(hit) = guard.get(&bs_year) {
-            return Arc::clone(hit);
-        }
+    if let Ok(guard) = cache.lock()
+        && let Some(hit) = guard.get(&bs_year)
+    {
+        return Arc::clone(hit);
     }
 
     let mut found: Vec<(BsDate, Festival)> = Vec::new();

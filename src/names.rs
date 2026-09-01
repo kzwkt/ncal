@@ -116,48 +116,6 @@ pub fn to_devanagari(n: u32) -> String {
     digits.iter().rev().collect()
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn month_names_cover_the_whole_year() {
-        for month in 1..=12u8 {
-            assert!(!bs_month_name(month).is_empty());
-            assert!(!bs_month_name_np(month).is_empty());
-        }
-        assert_eq!(bs_month_name(0), "");
-        assert_eq!(bs_month_name_np(13), "");
-    }
-
-    #[test]
-    fn weekday_names_cover_the_whole_week() {
-        for weekday in 0..=6u8 {
-            assert!(!weekday_name(weekday).is_empty());
-            assert!(!weekday_name_np(weekday).is_empty());
-            assert!(!weekday_short_np(weekday).is_empty());
-            assert_eq!(weekday_short(weekday).chars().count(), 2);
-        }
-        assert_eq!(weekday_name(7), "");
-    }
-
-    #[test]
-    fn devanagari_digits_render() {
-        assert_eq!(to_devanagari(0), "०");
-        assert_eq!(to_devanagari(7), "७");
-        assert_eq!(to_devanagari(13), "१३");
-        assert_eq!(to_devanagari(2083), "२०८३");
-    }
-
-    #[test]
-    fn devanagari_is_one_char_per_digit() {
-        // Guards the `center_text` alignment assumption: these are single
-        // scalar values, so `.chars().count()` is the right width measure.
-        assert_eq!(to_devanagari(2083).chars().count(), 4);
-        assert_eq!(to_devanagari(31).chars().count(), 2);
-    }
-}
-
 /// Tithi names, indexed 1-30 from Shukla Pratipada as [`crate::panchanga`]
 /// numbers them, as `(romanized, Devanagari)`.
 ///
@@ -197,5 +155,47 @@ pub fn paksha_name(index: u8) -> (&'static str, &'static str) {
         1..=15 => ("Shukla", "शुक्ल पक्ष"),
         16..=30 => ("Krishna", "कृष्ण पक्ष"),
         _ => ("", ""),
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn month_names_cover_the_whole_year() {
+        for month in 1..=12u8 {
+            assert!(!bs_month_name(month).is_empty());
+            assert!(!bs_month_name_np(month).is_empty());
+        }
+        assert_eq!(bs_month_name(0), "");
+        assert_eq!(bs_month_name_np(13), "");
+    }
+
+    #[test]
+    fn weekday_names_cover_the_whole_week() {
+        for weekday in 0..=6u8 {
+            assert!(!weekday_name(weekday).is_empty());
+            assert!(!weekday_name_np(weekday).is_empty());
+            assert!(!weekday_short_np(weekday).is_empty());
+            assert_eq!(weekday_short(weekday).chars().count(), 2);
+        }
+        assert_eq!(weekday_name(7), "");
+    }
+
+    #[test]
+    fn devanagari_digits_render() {
+        assert_eq!(to_devanagari(0), "०");
+        assert_eq!(to_devanagari(7), "७");
+        assert_eq!(to_devanagari(13), "१३");
+        assert_eq!(to_devanagari(2083), "२०८३");
+    }
+
+    #[test]
+    fn devanagari_is_one_char_per_digit() {
+        // Guards the `center_text` alignment assumption: these are single
+        // scalar values, so `.chars().count()` is the right width measure.
+        assert_eq!(to_devanagari(2083).chars().count(), 4);
+        assert_eq!(to_devanagari(31).chars().count(), 2);
     }
 }
