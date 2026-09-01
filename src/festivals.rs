@@ -547,6 +547,18 @@ mod tests {
             (2082, "Fagu Purnima (hills)", (2026, 3, 3)),
             (2082, "Fagu Purnima (Terai)", (2026, 3, 4)),
             (2082, "Ram Navami", (2026, 3, 27)),
+            // BS 2083 — the run every source agrees on. Vijaya Dashami 2083 is
+            // deliberately absent: popular sources say 20 October 2026, while
+            // the Panchang Nirnayak Samiti publishes a tika muhurta of 11:53 on
+            // the 21st. Dashami does not begin until 13:06 on the 20th, so it is
+            // running at neither midday nor aparahna that day and the samiti's
+            // own time is only satisfied on the 21st, which is what the rule
+            // here produces. Pinning either date would be asserting more than is
+            // settled.
+            (2083, "Ghatasthapana", (2026, 10, 11)),
+            (2083, "Fulpati", (2026, 10, 17)),
+            (2083, "Maha Ashtami", (2026, 10, 18)),
+            (2083, "Maha Navami", (2026, 10, 19)),
         ];
 
         let mut wrong = Vec::new();
