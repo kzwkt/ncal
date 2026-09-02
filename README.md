@@ -12,7 +12,7 @@ It supports:
 - the day's panchanga: tithi, paksha, and sunrise/sunset for Kathmandu
 - JSON output, so other programs can build on it
 
-## Build and run
+## Build ,run and install
 
 Requirements:
 - Rust toolchain (stable)
@@ -28,6 +28,12 @@ Run:
 
 ```bash
 cargo run -- [args]
+```
+
+Install:
+
+```bash
+cargo install ncal
 ```
 
 ## Usage
