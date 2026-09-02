@@ -35,10 +35,10 @@ const DEG: f64 = std::f64::consts::PI / 180.0;
 /// The instant a festival rule is evaluated at.
 ///
 /// Daylight is divided into five equal parts; three of these name one of them.
-/// `Nishita` is the odd one out and is the local solar midnight *opening* the
-/// named civil day — the small hours of that morning, not the following night.
-/// That is the association Nepal's patro uses: Krishna Janmashtami 2082 falls on
-/// 16 August 2025, and ashtami began at 00:05 that morning.
+/// `Nishita` is the odd one out and is the middle-of-night muhurta in the night
+/// that *follows* the named civil day (computed from that day's sunset to the
+/// next sunrise), and for festival rules it is treated as a span, not an instant.
+/// See [`nishita_window`].
 #[derive(Debug, Clone, Copy, PartialEq, Eq)]
 pub enum Kala {
     /// Sunrise. The default: "the tithi running at daybreak owns the day."
