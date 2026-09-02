@@ -209,8 +209,8 @@ mod tests {
         let value = parse(&today_document(today()).unwrap());
 
         assert!(value["ncal"].is_string());
-        assert_eq!(value["range"]["bs_start"], 2000);
-        assert_eq!(value["range"]["bs_end"], 2090);
+        assert_eq!(value["range"]["bs_start"], crate::BS_START_YEAR);
+        assert_eq!(value["range"]["bs_end"], crate::BS_END_YEAR);
         assert!(value["today"]["bs"]["year"].is_number());
         assert_eq!(value["today"]["ad"], "2026-08-29");
         assert!(value["today"]["month_name_np"].is_string());
