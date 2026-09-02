@@ -9,6 +9,7 @@ use serde::Serialize;
 
 use crate::festivals::{self, Festival};
 use crate::names;
+use crate::panchanga::Reading;
 use crate::{BsDate, NcalError, bs_month_len, bs_to_ad};
 
 /// One day of a BS month, with the Gregorian date it maps to.
@@ -27,6 +28,10 @@ pub struct DayCell {
     /// Saturday (the Nepali weekend) or a festival flagged as a public holiday.
     pub is_holiday: bool,
     pub festivals: Vec<Festival>,
+    /// Tithi, paksha and the sun's times for this day. The grid is what a GUI
+    /// renders, so the reading has to travel with the cell rather than needing a
+    /// second call per day.
+    pub panchanga: Reading,
 }
 
 /// A BS month laid out in weeks, Sunday-first, padded with `None` at both ends.
@@ -67,6 +72,7 @@ fn day_cell(bs: BsDate, ad: NaiveDate, today: NaiveDate) -> DayCell {
         is_today: ad == today,
         is_holiday: weekday == SATURDAY || festivals.iter().any(|f| f.holiday),
         festivals,
+        panchanga: Reading::for_date(ad),
     }
 }
 

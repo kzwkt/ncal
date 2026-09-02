@@ -5,6 +5,7 @@ pub mod festivals;
 pub mod grid;
 pub mod json;
 pub mod names;
+pub mod panchanga;
 
 use chrono::{Duration, NaiveDate};
 use serde::{Deserialize, Serialize};

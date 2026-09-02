@@ -1,0 +1,90 @@
+{
+  "_comment": [
+    "Rules for tithi-based (lunar) festivals. Each entry says which lunar month,",
+    "which half of it, which tithi, and at what moment of the day the tithi must be",
+    "running for the festival to fall on that day. From these ncal computes the date",
+    "for any BS year in range — there is no per-year table to maintain.",
+    "",
+    "'lunar_month' is 1-12 and names the AMANTA month: the lunation from one new",
+    "moon to the next, named after the BS solar month the opening new moon falls in.",
+    "Nepali speech and most printed patros use PURNIMANTA names, in which a krishna",
+    "paksha carries the NEXT month's name — Maha Shivaratri is spoken of as Falgun",
+    "krishna 14 but is written here as Magh krishna 14. To translate a purnimanta",
+    "rule: a shukla paksha keeps its month number, a krishna paksha loses one.",
+    "Amanta is used because it is the scheme that closes over a single lunation and",
+    "therefore cannot drift across a sankranti.",
+    "",
+    "'kala' is the instant the tithi is judged at:",
+    "  udaya     - sunrise. The default; the tithi at daybreak owns the day.",
+    "  madhyanna - midday, the third fifth of daylight. Bhai Tika, Ram Navami.",
+    "  aparahna  - the fourth fifth of daylight. Vijaya Dashami is aparahna-vyapini.",
+    "  pradosh   - dusk, shortly after sunset. Laxmi Puja's amavasya, Chhath's arghya.",
+    "  nishita   - the solar midnight opening the day. Shivaratri, Janmashtami.",
+    "  begins    - not an instant: the day the tithi starts on. Currently unused.",
+    "",
+    "A date the government moves for its own reasons goes in festivals.json's",
+    "'lunar' array, which overrides whatever is computed here for that BS year."
+  ],
+
+  "computed": [
+    { "lunar_month": 1,  "paksha": "shukla",  "tithi": 3,  "kala": "udaya",     "en": "Akshaya Tritiya",        "np": "अक्षय तृतीया",           "holiday": false },
+    { "lunar_month": 1,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Buddha Jayanti",         "np": "बुद्ध जयन्ती",            "holiday": true  },
+
+    { "lunar_month": 2,  "paksha": "shukla",  "tithi": 6,  "kala": "udaya",     "en": "Sithi Nakha",            "np": "सिथि नख:",               "holiday": false },
+    { "lunar_month": 2,  "paksha": "shukla",  "tithi": 11, "kala": "udaya",     "en": "Nirjala Ekadashi",       "np": "निर्जला एकादशी",          "holiday": false },
+
+    { "lunar_month": 3,  "paksha": "shukla",  "tithi": 11, "kala": "udaya",     "en": "Harishayani Ekadashi",   "np": "हरिशयनी एकादशी",         "holiday": false },
+    { "lunar_month": 3,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Guru Purnima",           "np": "गुरु पूर्णिमा",           "holiday": false },
+    { "lunar_month": 3,  "paksha": "krishna", "tithi": 14, "kala": "udaya",     "en": "Gathamuga Chahre",       "np": "गथाँमुगः चह्रे",          "holiday": false },
+
+    { "lunar_month": 4,  "paksha": "shukla",  "tithi": 5,  "kala": "udaya",     "en": "Nag Panchami",           "np": "नाग पञ्चमी",             "holiday": false },
+    { "lunar_month": 4,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Janai Purnima",          "np": "जनै पूर्णिमा",            "holiday": true  },
+    { "lunar_month": 4,  "paksha": "krishna", "tithi": 1,  "kala": "udaya",     "en": "Gai Jatra",              "np": "गाईजात्रा",              "holiday": true  },
+    { "lunar_month": 4,  "paksha": "krishna", "tithi": 8,  "kala": "nishita",   "en": "Krishna Janmashtami",    "np": "कृष्ण जन्माष्टमी",        "holiday": true  },
+    { "lunar_month": 4,  "paksha": "krishna", "tithi": 15, "kala": "udaya",     "en": "Kushe Aunsi",            "np": "कुशे औंसी",              "holiday": false },
+
+    { "lunar_month": 5,  "paksha": "shukla",  "tithi": 3,  "kala": "udaya",     "en": "Haritalika Teej",        "np": "हरितालिका तीज",          "holiday": true  },
+    { "lunar_month": 5,  "paksha": "shukla",  "tithi": 4,  "kala": "madhyanna", "en": "Ganesh Chaturthi",       "np": "गणेश चतुर्थी",            "holiday": false },
+    { "lunar_month": 5,  "paksha": "shukla",  "tithi": 5,  "kala": "udaya",     "en": "Rishi Panchami",         "np": "ऋषि पञ्चमी",             "holiday": true  },
+    { "lunar_month": 5,  "paksha": "shukla",  "tithi": 14, "kala": "udaya",     "en": "Indra Jatra",            "np": "इन्द्रजात्रा",            "holiday": true  },
+    { "lunar_month": 5,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Sohra Shraddha begins",  "np": "सोह्र श्राद्ध आरम्भ",      "holiday": false },
+    { "lunar_month": 5,  "paksha": "krishna", "tithi": 8,  "kala": "udaya",     "en": "Jitiya",                 "np": "जितिया पर्व",            "holiday": true  },
+
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 1,  "kala": "udaya",     "en": "Ghatasthapana",          "np": "घटस्थापना",              "holiday": true  },
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 7,  "kala": "madhyanna", "en": "Fulpati",                "np": "फूलपाती",                "holiday": true  },
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 8,  "kala": "madhyanna", "en": "Maha Ashtami",           "np": "महाअष्टमी",              "holiday": true  },
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 9,  "kala": "aparahna",  "en": "Maha Navami",            "np": "महानवमी",                "holiday": true  },
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 10, "kala": "aparahna",  "en": "Vijaya Dashami",         "np": "विजया दशमी",             "holiday": true  },
+    { "lunar_month": 6,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Kojagrat Purnima",       "np": "कोजाग्रत पूर्णिमा",       "holiday": true  },
+    { "lunar_month": 6,  "paksha": "krishna", "tithi": 13, "kala": "udaya",     "en": "Kaag Tihar",             "np": "काग तिहार",              "holiday": true  },
+    { "lunar_month": 6,  "paksha": "krishna", "tithi": 14, "kala": "udaya",     "en": "Kukur Tihar",            "np": "कुकुर तिहार",            "holiday": true  },
+    { "lunar_month": 6,  "paksha": "krishna", "tithi": 15, "kala": "pradosh",   "en": "Laxmi Puja",             "np": "लक्ष्मी पूजा",            "holiday": true  },
+
+    { "lunar_month": 7,  "paksha": "shukla",  "tithi": 1,  "kala": "udaya",     "en": "Govardhan and Mha Puja", "np": "गोवर्धन र म्हः पूजा",     "holiday": true  },
+    { "lunar_month": 7,  "paksha": "shukla",  "tithi": 2,  "kala": "madhyanna", "en": "Bhai Tika",              "np": "भाइटीका",                "holiday": true  },
+    { "lunar_month": 7,  "paksha": "shukla",  "tithi": 6,  "kala": "pradosh",   "en": "Chhath",                 "np": "छठ पर्व",                "holiday": true  },
+    { "lunar_month": 7,  "paksha": "shukla",  "tithi": 11, "kala": "udaya",     "en": "Haribodhini Ekadashi",   "np": "हरिबोधिनी एकादशी",       "holiday": false },
+    { "lunar_month": 7,  "paksha": "krishna", "tithi": 14, "kala": "udaya",     "en": "Bala Chaturdashi",       "np": "बाला चतुर्दशी",           "holiday": false },
+
+    { "lunar_month": 8,  "paksha": "shukla",  "tithi": 5,  "kala": "udaya",     "en": "Vivaha Panchami",        "np": "विवाह पञ्चमी",           "holiday": false },
+    { "lunar_month": 8,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Yomari Punhi",           "np": "योमरी पुन्ही",            "holiday": false },
+    { "lunar_month": 8,  "paksha": "krishna", "tithi": 8,  "kala": "udaya",     "en": "Pitri Smriti Diwas",     "np": "पितृ स्मृति दिवस",        "holiday": false },
+
+    { "lunar_month": 9,  "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Swasthani Brata begins", "np": "स्वस्थानी व्रत आरम्भ",     "holiday": false },
+
+    { "lunar_month": 10, "paksha": "shukla",  "tithi": 1,  "kala": "udaya",     "en": "Sonam Losar",            "np": "सोनाम ल्होछार",          "holiday": true  },
+    { "lunar_month": 10, "paksha": "shukla",  "tithi": 5,  "kala": "udaya",     "en": "Basanta Panchami",       "np": "बसन्त पञ्चमी",            "holiday": true  },
+    { "lunar_month": 10, "paksha": "krishna", "tithi": 14, "kala": "nishita",   "en": "Maha Shivaratri",        "np": "महाशिवरात्रि",            "holiday": true  },
+
+    { "lunar_month": 11, "paksha": "shukla",  "tithi": 1,  "kala": "udaya",     "en": "Gyalpo Losar",           "np": "ग्याल्पो ल्होछार",        "holiday": true  },
+    { "lunar_month": 11, "paksha": "shukla",  "tithi": 15, "kala": "pradosh",   "en": "Holika Dahan",           "np": "होलिका दहन",             "holiday": false },
+    { "lunar_month": 11, "paksha": "shukla",  "tithi": 15, "kala": "udaya",     "en": "Fagu Purnima (hills)",   "np": "फागु पूर्णिमा (पहाड)",    "holiday": true  },
+    { "lunar_month": 11, "paksha": "krishna", "tithi": 1,  "kala": "udaya",     "en": "Fagu Purnima (Terai)",   "np": "फागु पूर्णिमा (तराई)",    "holiday": true  },
+    { "lunar_month": 11, "paksha": "krishna", "tithi": 15, "kala": "madhyanna", "en": "Ghode Jatra",            "np": "घोडेजात्रा",             "holiday": true  },
+
+    { "lunar_month": 12, "paksha": "shukla",  "tithi": 1,  "kala": "udaya",     "en": "Yugadi",                 "np": "युगादि नव वर्ष",          "holiday": false },
+    { "lunar_month": 12, "paksha": "shukla",  "tithi": 8,  "kala": "udaya",     "en": "Chaite Dashain",         "np": "चैते दशैँ",              "holiday": false },
+    { "lunar_month": 12, "paksha": "shukla",  "tithi": 9,  "kala": "madhyanna", "en": "Ram Navami",             "np": "रामनवमी",                "holiday": true  },
+    { "lunar_month": 12, "paksha": "krishna", "tithi": 15, "kala": "udaya",     "en": "Mata Tirtha Aunsi",      "np": "मातातीर्थ औंसी",          "holiday": false }
+  ]
+}

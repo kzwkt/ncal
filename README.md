@@ -8,7 +8,8 @@ It supports:
 - AD <-> BS date conversion, in both directions
 - current-day highlighting in calendar output
 - Devanagari month names, weekday names and numerals
-- festivals and public holidays
+- festivals and public holidays, computed from the ephemeris rather than tabulated
+- the day's panchanga: tithi, paksha, and sunrise/sunset for Kathmandu
 - JSON output, so other programs can build on it
 
 ## Build and run
@@ -84,23 +85,35 @@ ncal --json --convert 2026-04-14
 
 ```jsonc
 {
-  "ncal": "0.2.0",
-  "range": { "bs_start": 2000, "bs_end": 2090, "lunar_years_covered": null },
+  "ncal": "0.3.0",
+  "range": {
+    "bs_start": 2000, "bs_end": 2099,
+    "festival_source": "computed",   // festivals are derived, not tabulated
+    "festival_range": [2000, 2099],
+    "override_years": null           // BS years with a hand-verified correction
+  },
   "today": {
     "bs": { "year": 2083, "month": 5, "day": 13 },
     "ad": "2026-08-29", "weekday": 6,
     "month_name": "Bhadra", "month_name_np": "भदौ",
     "weekday_name": "Saturday", "weekday_name_np": "शनिबार",
     "bs_day_np": "१३", "bs_year_np": "२०८३",
-    "is_holiday": true, "festivals": []
+    "is_holiday": true, "festivals": [],
+    "panchanga": {
+      "tithi": 12, "tithi_name": "Dwadashi", "tithi_name_np": "द्वादशी",
+      "paksha": "Shukla", "paksha_np": "शुक्ल पक्ष",
+      "tithi_ends": "14:22",           // Nepal time, or null if it outlasts the day
+      "sunrise": "05:43", "sunset": "18:25"
+    }
   },
   "month": {
     "year": 2083, "month": 5, "days": 31, "name": "Bhadra", "name_np": "भदौ",
+    "year_np": "२०८३",
     "start_ad": "2026-08-17", "end_ad": "2026-09-16",
     "weeks": [ [ null, null, { "bs_day": 1, "bs_day_np": "१", "ad": "2026-08-17",
                                "ad_day": 17, "ad_month_short": "Aug", "weekday": 2,
                                "is_today": false, "is_holiday": false,
-                               "festivals": [] } ] ]
+                               "festivals": [], "panchanga": { /* as above */ } } ] ]
   },
   "festivals": [ { "bs_day": 1, "en": "Nepali New Year", "np": "नयाँ वर्ष", "holiday": true } ]
 }
@@ -111,20 +124,37 @@ Weekdays count from Sunday = 0. Treat these field names as a contract.
 
 ## Festivals
 
-Festival data lives in `src/data/festivals.json` and is embedded into the binary, so
-there is no runtime file dependency and no network access. Three entry kinds:
+Festival and panchanga data are embedded with `include_str!`, so there is no runtime file
+dependency and no network access.
 
-- `fixed` — the same BS month/day every year (Nepali New Year, Constitution Day).
-  Rule-based, so correct for every supported year.
+**Tithi-based festivals are computed, not tabulated.** Dashain, Tihar, Teej, Shivaratri,
+Holi and the rest are stated in `src/data/rules.json` as the rule they actually are —
+which lunar month, which paksha, which tithi, and at which kāla the tithi has to be
+running — and `src/panchanga.rs` resolves that to a date for any year in range. There is
+no per-year table to maintain and nothing that goes stale.
+
+That works because a tithi is a *difference* between the moon's and the sun's longitudes.
+Whatever ayanamsa you would add to both cancels exactly, so no ephemeris calibration is
+needed and the result is as good at BS 2099 as at BS 2000.
+
+Four entry kinds:
+
+- `computed` — a tithi rule in `rules.json`. Covers the festivals that matter most.
+- `fixed` — the same BS month/day every year (Nepali New Year, the twelve sankrantis).
+  A BS month begins on its sankranti by construction, so those need no astronomy.
 - `ad_fixed` — the same Gregorian month/day every year (Labour Day, Christmas).
-- `lunar` — tithi-based festivals, pinned to one BS year.
+- `lunar` — a hand-verified date pinned to one BS year, which *overrides* the computed
+  rule of the same name. Nepal's holiday gazette occasionally moves an observance for
+  reasons no ephemeris predicts; this is where that goes, without giving up computation
+  for the other ninety-nine years. `override_years` reports the range in use.
 
-**Dashain, Tihar, Teej and the other tithi-based festivals are lunar.** They cannot be
-derived from the reference table and have to be entered per year from an authoritative
-panchanga. `lunar_years_covered` reports the inclusive BS year range for which that has
-been done — it is `null` while no lunar entries exist, so a consumer can say "festival
-data unavailable for this year" instead of showing an empty month as though the year
-genuinely had none.
+`festival_source` in the JSON reports `"computed"` and `festival_range` the years it
+spans, so a consumer knows whether a festival-free month means "none" or "unknown".
+
+Accuracy is pinned by `known_festival_dates_match` in `src/festivals.rs`, a table of
+published Nepali festival dates the rules must reproduce. It deliberately includes the
+awkward years: BS 2081 lost a tithi, so Maha Ashtami and Maha Navami share one day and
+Kukur Tihar shares another with Laxmi Puja.
 
 ## Output behavior
 
@@ -139,12 +169,18 @@ genuinely had none.
 
 Date conversion and validation are constrained by the built-in BS reference table:
 
-- Supported BS year range: `2000` to `2090` (inclusive)
+- Supported BS year range: `2000` to `2099` (inclusive)
 - Supported month range: `1` to `12`
 - Day must be valid for the selected BS month and year
 
 Anchor mapping used by conversion:
 - `BS 2000-01-01` = `AD 1943-04-14`
+
+BS month lengths are fixed year by year by Nepal's Calendar Determination Committee and
+cannot be derived, so they come from a table. It is cross-checked against two independent
+published sources which agree on every year in range except BS 2089, where the wider of
+the two is used. Rows are never extrapolated: when a year is not in a source, the table
+stops rather than guessing.
 
 Because the reference table is finite, conversions outside the covered date span are not supported.
 

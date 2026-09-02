@@ -2,35 +2,49 @@
   "_comment": [
     "Festival and public-holiday dataset for ncal.",
     "",
-    "'fixed'    - same BS month/day every year. Rule-based, so correct for all years.",
+    "'fixed'    - same BS month/day every year. A BS month begins on its sankranti by",
+    "             construction, so every sankranti is simply day 1 of its month and",
+    "             needs no astronomy of its own.",
     "'ad_fixed' - same Gregorian month/day every year.",
-    "'lunar'    - tithi-based festivals, pinned to one BS year. These CANNOT be derived",
-    "             from the BS_REFERENCE table and must be entered per year from an",
-    "             authoritative panchanga (e.g. the Nepal Calendar Determination",
-    "             Committee's published calendar).",
+    "'lunar'    - a hand-verified date pinned to one BS year, which OVERRIDES the",
+    "             computed rule of the same name in rules.json. Tithi-based festivals",
+    "             are computed, not tabulated; this exists only for the occasional",
+    "             observance the government moves for reasons no ephemeris predicts.",
     "",
-    "'lunar_years_covered' is the inclusive [first, last] BS year range for which lunar",
-    "entries have been entered and verified. Leave it empty while 'lunar' is empty so",
-    "the UI can tell users that Dashain/Tihar dates are not available yet rather than",
-    "implying those years genuinely have no festivals."
+    "'lunar_years_covered' is the inclusive [first, last] BS year range those overrides",
+    "cover. It is empty because there are none: nothing has needed correcting."
   ],
 
   "lunar_years_covered": [],
 
   "fixed": [
-    { "month": 1,  "day": 1,  "en": "Nepali New Year",  "np": "नयाँ वर्ष",       "holiday": true },
-    { "month": 2,  "day": 15, "en": "Republic Day",     "np": "गणतन्त्र दिवस",   "holiday": true },
-    { "month": 6,  "day": 3,  "en": "Constitution Day", "np": "संविधान दिवस",    "holiday": true },
-    { "month": 9,  "day": 27, "en": "Prithvi Jayanti",  "np": "पृथ्वी जयन्ती",   "holiday": false },
-    { "month": 10, "day": 1,  "en": "Maghe Sankranti",  "np": "माघे संक्रान्ति", "holiday": true },
-    { "month": 11, "day": 7,  "en": "Democracy Day",    "np": "प्रजातन्त्र दिवस", "holiday": true }
+    { "month": 1,  "day": 1,  "en": "Nepali New Year",       "np": "नयाँ वर्ष",           "holiday": true  },
+    { "month": 1,  "day": 1,  "en": "Baisakh Sankranti",     "np": "बैशाख सङ्क्रान्ति",    "holiday": false },
+    { "month": 2,  "day": 1,  "en": "Jestha Sankranti",      "np": "जेठ सङ्क्रान्ति",      "holiday": false },
+    { "month": 2,  "day": 15, "en": "Republic Day",          "np": "गणतन्त्र दिवस",       "holiday": true  },
+    { "month": 3,  "day": 1,  "en": "Ashadh Sankranti",      "np": "असार सङ्क्रान्ति",     "holiday": false },
+    { "month": 3,  "day": 15, "en": "National Paddy Day",    "np": "राष्ट्रिय धान दिवस",   "holiday": false },
+    { "month": 4,  "day": 1,  "en": "Shrawan Sankranti",     "np": "साउने सङ्क्रान्ति",    "holiday": false },
+    { "month": 5,  "day": 1,  "en": "Bhadra Sankranti",      "np": "भदौ सङ्क्रान्ति",      "holiday": false },
+    { "month": 6,  "day": 1,  "en": "Ashwin Sankranti",      "np": "असोज सङ्क्रान्ति",     "holiday": false },
+    { "month": 6,  "day": 3,  "en": "Constitution Day",      "np": "संविधान दिवस",        "holiday": true  },
+    { "month": 7,  "day": 1,  "en": "Kartik Sankranti",      "np": "कार्तिक सङ्क्रान्ति",  "holiday": false },
+    { "month": 8,  "day": 1,  "en": "Mangsir Sankranti",     "np": "मङ्सिर सङ्क्रान्ति",   "holiday": false },
+    { "month": 9,  "day": 1,  "en": "Poush Sankranti",       "np": "पुष सङ्क्रान्ति",      "holiday": false },
+    { "month": 9,  "day": 15, "en": "Tamu Losar",            "np": "तमु ल्होसार",         "holiday": true  },
+    { "month": 9,  "day": 27, "en": "Prithvi Jayanti",       "np": "पृथ्वी जयन्ती",        "holiday": false },
+    { "month": 10, "day": 1,  "en": "Maghe Sankranti",       "np": "माघे सङ्क्रान्ति",     "holiday": true  },
+    { "month": 11, "day": 1,  "en": "Falgun Sankranti",      "np": "फागुन सङ्क्रान्ति",    "holiday": false },
+    { "month": 11, "day": 7,  "en": "Democracy Day",         "np": "प्रजातन्त्र दिवस",     "holiday": true  },
+    { "month": 11, "day": 16, "en": "Martyrs' Day",          "np": "शहीद दिवस",           "holiday": true  },
+    { "month": 12, "day": 1,  "en": "Chaitra Sankranti",     "np": "चैत सङ्क्रान्ति",      "holiday": false }
   ],
 
   "ad_fixed": [
-    { "ad_month": 1,  "ad_day": 1,  "en": "English New Year",           "np": "अंग्रेजी नयाँ वर्ष", "holiday": false },
-    { "ad_month": 3,  "ad_day": 8,  "en": "International Women's Day",  "np": "नारी दिवस",        "holiday": false },
-    { "ad_month": 5,  "ad_day": 1,  "en": "Labour Day",                 "np": "मजदुर दिवस",       "holiday": true },
-    { "ad_month": 12, "ad_day": 25, "en": "Christmas",                  "np": "क्रिसमस",          "holiday": true }
+    { "ad_month": 1,  "ad_day": 1,  "en": "English New Year",          "np": "अंग्रेजी नयाँ वर्ष", "holiday": false },
+    { "ad_month": 3,  "ad_day": 8,  "en": "International Women's Day", "np": "नारी दिवस",         "holiday": false },
+    { "ad_month": 5,  "ad_day": 1,  "en": "Labour Day",                "np": "मजदुर दिवस",        "holiday": true  },
+    { "ad_month": 12, "ad_day": 25, "en": "Christmas",                 "np": "क्रिसमस",           "holiday": true  }
   ],
 
   "lunar": []
