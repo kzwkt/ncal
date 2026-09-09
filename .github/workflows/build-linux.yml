@@ -23,8 +23,25 @@ jobs:
       - name: Cache Rust dependencies
         uses: Swatinem/rust-cache@v2
 
+      - name: Inject Release Profile into Cargo.toml
+        run: |
+          cat << 'EOF' >> Cargo.toml
+
+          [profile.release]
+          opt-level = "z"
+          lto = true
+          codegen-units = 1
+          panic = "abort"
+          strip = true
+          EOF
+
       - name: Build release binary
         run: cargo build --release --locked
+
+      - name: Strip Debug Symbols
+        run: |
+          strip target/release/ncal
+          ls -lh target/release/ncal
 
       - name: Package Binary
         run: |
