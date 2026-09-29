@@ -2,6 +2,8 @@ name: Release Linux Binary
 
 on:
   push:
+    branches:
+      - main
     tags:
       - 'v*.*.*'
   workflow_dispatch:
@@ -52,6 +54,8 @@ jobs:
       - name: Create GitHub Release
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'v0.1.0' }}
+          tag_name: ${{ github.ref_type == 'tag' && github.ref_name || 'latest' }}
+          name: ${{ github.ref_type == 'tag' && github.ref_name || 'Latest Build' }}
           files: ncal-linux-x86_64.tar.gz
-          generate_release_notes: true
+          generate_release_notes: ${{ github.ref_type == 'tag' }}
+          prerelease: ${{ github.ref_type != 'tag' }}
